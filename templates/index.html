@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thompson Sampling Demo</title>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -24,15 +25,17 @@
         }
 
         select {
-            padding: 8px;
+            padding: 10px;
             font-size: 16px;
             margin-left: 10px;
+            border-radius: 5px;
         }
 
         .container {
             display: flex;
+            flex-wrap: wrap;
             margin-top: 20px;
-            gap: 40px;
+            gap: 20px;
         }
 
         .machine-info,
@@ -44,12 +47,13 @@
         }
 
         .machine-info {
-            width: 320px;
+            width: 100%;
+            max-width: 360px;
+            flex: 1 1 300px;
         }
 
         .visualization {
-            flex: 1;
-            max-width: 850px;
+            flex: 2 1 300px;
         }
 
         .machine {
@@ -65,14 +69,14 @@
         }
 
         button {
-            padding: 8px 12px;
-            margin-right: 10px;
-            margin-top: 10px;
+            padding: 10px 14px;
+            margin: 6px 6px 0 0;
             border: none;
             background-color: #007bff;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 15px;
             transition: background 0.2s ease;
         }
 
@@ -89,16 +93,52 @@
         }
 
         #visualization {
+            display: block;
             max-width: 100%;
+            height: auto;
             border-radius: 10px;
             border: 1px solid #ccc;
+            width: 100%;
         }
+
 
         #recommendation {
             font-weight: bold;
             margin-top: 10px;
             font-size: 16px;
             color: #28a745;
+        }
+
+        .graph-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .graph-wrapper img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .machine-info,
+            .visualization {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
@@ -123,8 +163,12 @@
 
         <div class="visualization">
             <h3>Visualization</h3>
-            <img id="visualization" src="" alt="Stats Visualization" />
+            <div class="graph-wrapper">
+                <img id="visualization" src="" alt="Stats Visualization" />
+                <!-- Add more images here if needed -->
+            </div>
         </div>
+
     </div>
 
     <script>
@@ -139,13 +183,12 @@
                 const div = document.createElement('div');
                 div.className = 'machine';
                 div.innerHTML = `
-                    <h4>${machineNames[i]}</h4>
-                    <button class="reward-btn" data-machine="${i}" data-reward="1">Success</button>
-                    <button class="reward-btn" data-machine="${i}" data-reward="0">Failure</button>
-                    <div>Selections: <span id="count-${i}">0</span></div>
-                    <div>True Reward: <span id="true-${i}">?</span></div>
-                `;
-
+          <h4>${machineNames[i]}</h4>
+          <button class="reward-btn" data-machine="${i}" data-reward="1">Success</button>
+          <button class="reward-btn" data-machine="${i}" data-reward="0">Failure</button>
+          <div>Selections: <span id="count-${i}">0</span></div>
+          <div>True Reward: <span id="true-${i}">?</span></div>
+        `;
                 container.appendChild(div);
             }
 
